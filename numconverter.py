@@ -11,7 +11,6 @@ def dec_to_bin(dec):
 def main():
     number = 12345
     binary = dec_to_bin(number)
-    print binary
     print binary[::-1]
     
 
