@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+import argparse
+
+
 def dec_to_bin(dec):
     result = dec / 2
     rest = dec % 2
@@ -59,9 +62,9 @@ def hex_to_dec(hexa):
     """
 
     decimal = 0
-    rev_hex = str(hexa)[::-1]
+    rev_hex = str(hexa)[::-1].lower()
     for digit in range(len(rev_hex)):
-        if rev_hex[digit].lower() in substitution:
+        if rev_hex[digit] in substitution:
             new_hex = rev_hex[digit].replace(rev_hex[digit],substitution[rev_hex[digit]])
         else:
             new_hex = rev_hex[digit]
@@ -70,8 +73,33 @@ def hex_to_dec(hexa):
 
     return decimal
 
+def hex_to_bin(hexa):
+    return dec_to_bin(hex_to_dec(hexa))
+
+def bin_to_hex(bin):
+    return dec_to_hex(bin_to_dec(bin))
+
 def main():
-    number = 15
+    parser = argparse.ArgumentParser(description='Covert hexadecimal, decimal and binary numbers.')
+    parser.add_argument('--hex', '-H', type=str, help='hexadecimal number to convert', required=False, default=None)
+    parser.add_argument('--binary', '-b', type=str, help='binary number to convert', required=False, default=None)
+    parser.add_argument('--decimal', '-d', type=int, help='decimal number to convert', required=False, default=None)
+
+
+    args = parser.parse_args()
+    
+    if args.hex:
+        print "hex: %s = dec: %s\n" % (args.hex, hex_to_dec(args.hex))
+        binary = hex_to_bin(args.hex)
+        print "hex: %s = bin: %s\n" % (args.hex,binary[::-1])
+    elif args.binary:
+        print "binary: %s = dec: %s\n" % (args.binary, bin_to_dec(args.binary))
+        hexa = bin_to_hex(args.binary)
+        print "bin: %s = hex: %s\n" % (args.binary,hexa[::-1])
+
+    
+
+    """number = 15
     binary_input = 1111
     hex_input = "ff"
     binary = dec_to_bin(number)
@@ -80,7 +108,7 @@ def main():
     print "dec: %s = hex: %s\n" % (number,hexa[::-1])
     print "bin: %s = dec: %s\n" % (binary_input, bin_to_dec(binary_input))
     print "hex: %s = dec: %s\n" % (hex_input, hex_to_dec(hex_input))
-
+    """
 
 if __name__ == "__main__":
     main()
