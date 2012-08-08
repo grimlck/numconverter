@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import argparse
+import string
 
 
 def dec_to_bin(dec):
@@ -79,36 +80,45 @@ def hex_to_bin(hexa):
 def bin_to_hex(bin):
     return dec_to_hex(bin_to_dec(bin))
 
+def is_binary(s):
+    for digit in str(s):
+        if digit != "0" and digit != "1":
+            result = False
+            break
+        else:
+            result = True
+    return result
+
 def main():
     parser = argparse.ArgumentParser(description='Covert hexadecimal, decimal and binary numbers.')
-    parser.add_argument('--hex', '-H', type=str, help='hexadecimal number to convert', required=False, default=None)
-    parser.add_argument('--binary', '-b', type=str, help='binary number to convert', required=False, default=None)
-    parser.add_argument('--decimal', '-d', type=int, help='decimal number to convert', required=False, default=None)
+    parser.add_argument('-H', '--hex', type=str, help='hexadecimal number to convert', required=False, default=None)
+    parser.add_argument('-b', '--binary', type=str, help='binary number to convert', required=False, default=None)
+    parser.add_argument('-d', '--decimal', type=int, help='decimal number to convert', required=False, default=None)
 
 
     args = parser.parse_args()
     
     if args.hex:
-        print "hex: %s = dec: %s\n" % (args.hex, hex_to_dec(args.hex))
-        binary = hex_to_bin(args.hex)
-        print "hex: %s = bin: %s\n" % (args.hex,binary[::-1])
-    elif args.binary:
-        print "binary: %s = dec: %s\n" % (args.binary, bin_to_dec(args.binary))
-        hexa = bin_to_hex(args.binary)
-        print "bin: %s = hex: %s\n" % (args.binary,hexa[::-1])
+        if all(c in string.hexdigits for c in args.hex) == True:
+            print "%s(hex) = %s(dec)\n" % (args.hex, hex_to_dec(args.hex))
+            binary = hex_to_bin(args.hex)
+            print "%s(hex) = %s(bin)\n" % (args.hex,binary[::-1])
+        else:
+            print "%s is not a hexadecimal." % args.hex
 
-    
+    if args.binary:
+        if is_binary(args.binary) == True:
+            print "%s(bin) = %s(dec)\n" % (args.binary, bin_to_dec(args.binary))
+            hexa = bin_to_hex(args.binary)
+            print "%s(bin) = %s(hex)\n" % (args.binary,hexa[::-1])
+        else:
+            print "%s is not a binary number." % args.binary
+    if args.decimal:
+        print "%s(dec) = %s(hex)\n" % (args.decimal,dec_to_hex(args.decimal))
+        print "%s(dec) = %s(bin)\n" % (args.decimal,dec_to_bin(args.decimal))
+    if not args.decimal and not args.hex and not args.binary:
+        parser.print_help()
 
-    """number = 15
-    binary_input = 1111
-    hex_input = "ff"
-    binary = dec_to_bin(number)
-    print "dec: %s = bin: %s\n" % (number,binary[::-1])
-    hexa = dec_to_hex(number)
-    print "dec: %s = hex: %s\n" % (number,hexa[::-1])
-    print "bin: %s = dec: %s\n" % (binary_input, bin_to_dec(binary_input))
-    print "hex: %s = dec: %s\n" % (hex_input, hex_to_dec(hex_input))
-    """
 
 if __name__ == "__main__":
     main()
