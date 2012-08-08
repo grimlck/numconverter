@@ -30,13 +30,22 @@ def dec_to_hex(dec):
     else:
         return str(rest)
 
+def bin_to_dec(binary):
+    decimal = 0
+    reversed_binary = str(binary)[::-1]
+    for digit in range(len(reversed_binary)):
+        decimal = decimal + int(str(reversed_binary)[digit]) * (2 ** digit)
+
+    return decimal
+
 def main():
     number = 123455
+    binary_input = 1111
     binary = dec_to_bin(number)
     print "dec: %s = bin: %s\n" % (number,binary[::-1])
     hexa = dec_to_hex(number)
     print "dec: %s = hex: %s\n" % (number,hexa[::-1])
-    
+    print "bin: %s = dec: %s\n" % (binary_input, bin_to_dec(binary_input))
 
 if __name__ == "__main__":
     main()
