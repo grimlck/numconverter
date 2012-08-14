@@ -93,7 +93,7 @@ def main():
     parser = argparse.ArgumentParser(description='Covert hexadecimal, decimal and binary numbers.')
     parser.add_argument('-H', '--hex', type=str, help='hexadecimal number to convert', required=False, default=None)
     parser.add_argument('-b', '--binary', type=str, help='binary number to convert', required=False, default=None)
-    parser.add_argument('-d', '--decimal', type=int, help='decimal number to convert', required=False, default=None)
+    parser.add_argument('-d', '--decimal', type=int, help='positive decimal number to convert', required=False, default=None)
 
 
     args = parser.parse_args()
@@ -113,9 +113,13 @@ def main():
             print "%s(bin) = %s(hex)\n" % (args.binary,hexa)
         else:
             print "%s is not a binary number." % args.binary
-    if args.decimal:
+            
+    if args.decimal and args.decimal > 0:
         print "%s(dec) = %s(hex)\n" % (args.decimal,dec_to_hex(args.decimal))
         print "%s(dec) = %s(bin)\n" % (args.decimal,dec_to_bin(args.decimal))
+    else:
+        print "%s is not a postive decimal number" % args.decimal
+    
     if not args.decimal and not args.hex and not args.binary:
         parser.print_help()
 
