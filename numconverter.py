@@ -4,14 +4,14 @@ import string
 
 
 def dec_to_bin(dec):
-    result = dec / 2
     rest = dec % 2
-    print "%s \t:\t 2 = %s \t-- Rest: %s" % (dec,int(result),rest)
-    if int(result) != 0:
-        binary = str(rest) + str(dec_to_bin(int(result)))
+    if dec != 0:
+        print "%s \t:\t 2 = %s \t-- Rest: %s" % (dec,int(dec/2),rest)
+    if int(dec) != 0:
+        binary = str(dec_to_bin(int(dec/2))) + str(rest)
         return binary
     else:
-        return str(rest)
+        return ""
 
 def dec_to_hex(dec):
     substitution = {
@@ -22,17 +22,17 @@ def dec_to_hex(dec):
         "14" : "E",
         "15" : "F"
     }
-    result = dec / 16
     rest = str(dec % 16)
-    print "%s \t:\t 16 = %s \t-- Rest: %s" % (dec,int(result),rest)
+    if dec != 0:
+        print "%s \t:\t 16 = %s \t-- Rest: %s" % (dec,int(dec/16),rest)
     if rest in substitution:
         rest = rest.replace(rest,substitution[rest])
 
-    if int(result) != 0:
-           hexa = str(rest) + str(dec_to_hex(int(result)))
-           return hexa
+    if int(dec) != 0:
+        hexa = str(dec_to_hex(int(dec/16))) + str(rest)
+        return hexa
     else:
-        return str(rest)
+        return ""
 
 def bin_to_dec(binary):
     decimal = 0
@@ -102,7 +102,7 @@ def main():
         if all(c in string.hexdigits for c in args.hex) == True:
             print "%s(hex) = %s(dec)\n" % (args.hex, hex_to_dec(args.hex))
             binary = hex_to_bin(args.hex)
-            print "%s(hex) = %s(bin)\n" % (args.hex,binary[::-1])
+            print "%s(hex) = %s(bin)\n" % (args.hex,binary)
         else:
             print "%s is not a hexadecimal." % args.hex
 
@@ -110,7 +110,7 @@ def main():
         if is_binary(args.binary) == True:
             print "%s(bin) = %s(dec)\n" % (args.binary, bin_to_dec(args.binary))
             hexa = bin_to_hex(args.binary)
-            print "%s(bin) = %s(hex)\n" % (args.binary,hexa[::-1])
+            print "%s(bin) = %s(hex)\n" % (args.binary,hexa)
         else:
             print "%s is not a binary number." % args.binary
     if args.decimal:
