@@ -90,37 +90,37 @@ def is_binary(s):
     return result
 
 def main():
-    parser = argparse.ArgumentParser(description='Covert hexadecimal, decimal and binary numbers.')
+    parser = argparse.ArgumentParser(description='Covert hexadecimal, decimal and binary numbers. Use only one argument at a time.')
     parser.add_argument('-H', '--hex', type=str, help='hexadecimal number to convert', required=False, default=None)
     parser.add_argument('-b', '--binary', type=str, help='binary number to convert', required=False, default=None)
     parser.add_argument('-d', '--decimal', type=int, help='positive decimal number to convert', required=False, default=None)
+    parser.add_argument('-v', '--verbose', action='store_true', required=False, default=False)
 
 
     args = parser.parse_args()
     
-    if args.hex:
+    if args.hex and not args.binary and not args.decimal:
         if all(c in string.hexdigits for c in args.hex) == True:
             print "%s(hex) = %s(dec)\n" % (args.hex, hex_to_dec(args.hex))
-            binary = hex_to_bin(args.hex)
-            print "%s(hex) = %s(bin)\n" % (args.hex,binary)
+            print "%s(hex) = %s(bin)\n" % (args.hex,hex_to_bin(args.hex))
         else:
             print "%s is not a hexadecimal." % args.hex
 
-    if args.binary:
+    elif args.binary and not args.hex and not args.decimal:
         if is_binary(args.binary) == True:
             print "%s(bin) = %s(dec)\n" % (args.binary, bin_to_dec(args.binary))
-            hexa = bin_to_hex(args.binary)
-            print "%s(bin) = %s(hex)\n" % (args.binary,hexa)
+            print "%s(bin) = %s(hex)\n" % (args.binary,bin_to_hex(args.binary))
         else:
             print "%s is not a binary number." % args.binary
             
-    if args.decimal and args.decimal > 0:
-        print "%s(dec) = %s(hex)\n" % (args.decimal,dec_to_hex(args.decimal))
-        print "%s(dec) = %s(bin)\n" % (args.decimal,dec_to_bin(args.decimal))
-    else:
-        print "%s is not a postive decimal number" % args.decimal
+    elif args.decimal and not args.hex and not args.binary:
+        if args.decimal >= 0:
+            print "%s(dec) = %s(hex)\n" % (args.decimal,dec_to_hex(args.decimal))
+            print "%s(dec) = %s(bin)\n" % (args.decimal,dec_to_bin(args.decimal))
+        else:
+            print "%s is not a postive decimal number" % args.decimal
     
-    if not args.decimal and not args.hex and not args.binary:
+    else:
         parser.print_help()
 
 
