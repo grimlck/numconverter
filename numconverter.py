@@ -3,17 +3,19 @@ import argparse
 import string
 
 
-def dec_to_bin(dec):
+def dec_to_bin(dec, verbose=False):
     rest = dec % 2
-    if dec != 0:
-        print "%s \t:\t 2 = %s \t-- Rest: %s" % (dec,int(dec/2),rest)
     if int(dec) != 0:
-        binary = str(dec_to_bin(int(dec/2))) + str(rest)
+        if verbose == True:
+            print "%s \t:\t 2 = %s \t-- Rest: %s" % (dec,int(dec/2),rest)
+            verbose = True
+        
+        binary = str(dec_to_bin(int(dec/2),verbose)) + str(rest)
         return binary
     else:
         return ""
 
-def dec_to_hex(dec):
+def dec_to_hex(dec, verbose=False):
     substitution = {
         "10" : "A",
         "11" : "B",
@@ -23,13 +25,15 @@ def dec_to_hex(dec):
         "15" : "F"
     }
     rest = str(dec % 16)
-    if dec != 0:
-        print "%s \t:\t 16 = %s \t-- Rest: %s" % (dec,int(dec/16),rest)
     if rest in substitution:
         rest = rest.replace(rest,substitution[rest])
 
     if int(dec) != 0:
-        hexa = str(dec_to_hex(int(dec/16))) + str(rest)
+        if verbose == True:
+            print "%s \t:\t 16 = %s \t-- Rest: %s" % (dec,int(dec/16),rest)
+            verbose = True
+
+        hexa = str(dec_to_hex(int(dec/16),verbose)) + str(rest)
         return hexa
     else:
         return ""
@@ -74,11 +78,11 @@ def hex_to_dec(hexa):
 
     return decimal
 
-def hex_to_bin(hexa):
-    return dec_to_bin(hex_to_dec(hexa))
+def hex_to_bin(hexa, verbose=False):
+    return dec_to_bin(hex_to_dec(hexa), verbose)
 
-def bin_to_hex(bin):
-    return dec_to_hex(bin_to_dec(bin))
+def bin_to_hex(bin, verbose=False):
+    return dec_to_hex(bin_to_dec(bin), verbose)
 
 def is_binary(s):
     for digit in str(s):
@@ -96,27 +100,26 @@ def main():
     parser.add_argument('-d', '--decimal', type=int, help='positive decimal number to convert', required=False, default=None)
     parser.add_argument('-v', '--verbose', action='store_true', required=False, default=False)
 
-
     args = parser.parse_args()
     
     if args.hex and not args.binary and not args.decimal:
         if all(c in string.hexdigits for c in args.hex) == True:
             print "%s(hex) = %s(dec)\n" % (args.hex, hex_to_dec(args.hex))
-            print "%s(hex) = %s(bin)\n" % (args.hex,hex_to_bin(args.hex))
+            print "%s(hex) = %s(bin)\n" % (args.hex,hex_to_bin(args.hex, args.verbose))
         else:
             print "%s is not a hexadecimal." % args.hex
 
     elif args.binary and not args.hex and not args.decimal:
         if is_binary(args.binary) == True:
             print "%s(bin) = %s(dec)\n" % (args.binary, bin_to_dec(args.binary))
-            print "%s(bin) = %s(hex)\n" % (args.binary,bin_to_hex(args.binary))
+            print "%s(bin) = %s(hex)\n" % (args.binary,bin_to_hex(args.binary,args.verbose))
         else:
             print "%s is not a binary number." % args.binary
             
     elif args.decimal and not args.hex and not args.binary:
         if args.decimal >= 0:
-            print "%s(dec) = %s(hex)\n" % (args.decimal,dec_to_hex(args.decimal))
-            print "%s(dec) = %s(bin)\n" % (args.decimal,dec_to_bin(args.decimal))
+            print "%s(dec) = %s(hex)\n" % (args.decimal,dec_to_hex(args.decimal,args.verbose))
+            print "%s(dec) = %s(bin)\n" % (args.decimal,dec_to_bin(args.decimal,args.verbose))
         else:
             print "%s is not a postive decimal number" % args.decimal
     
